@@ -36,7 +36,7 @@ RUN wget "$COSIGN_URL" \
 RUN apt-get remove -y make wget autoconf \
 	&& apt-get autoremove -y
 
-EXPOSE 443
+EXPOSE 8443
 
 COPY . /var/www/html/
 
