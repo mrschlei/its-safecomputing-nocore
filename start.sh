@@ -1,8 +1,10 @@
 #!/bin/sh
 
 # Redirect logs to stdout and stderr for docker reasons.
-ln -sf /dev/stdout /var/log/apache2/access_log
-ln -sf /dev/stderr /var/log/apache2/error_log
+# it seems both sylinks already exist. 
+# these commands create unnecessary duplicates
+#ln -sf /dev/stdout /var/log/apache2/access_log
+#ln -sf /dev/stderr /var/log/apache2/error_log
 
 # apache and virtual host secrets
 ln -sf /secrets/apache2/apache2.conf /etc/apache2/apache2.conf
@@ -20,18 +22,14 @@ then
 fi
 
 ## Rehash command needs to be run before starting apache.
-c_rehash /etc/ssl/certs
+c_rehash /etc/ssl/certs >/dev/null
 
 a2enmod ssl
 a2enmod include
 a2ensite default-ssl 
 
-## set SGID for www-data 
-chown -R www-data.www-data /var/www/html /var/cosign
-chmod -R 2775 /var/www/html /var/cosign
-
-cd /var/www/html
+#cd /var/www/html
 #drush @sites cc all --yes
-drush up --no-backup --yes
+#drush up --no-backup --yes
 
 /usr/local/bin/apache2-foreground
