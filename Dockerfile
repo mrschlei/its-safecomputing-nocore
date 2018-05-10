@@ -1,7 +1,9 @@
 FROM drupal7-cosign:latest
 
 COPY . /var/www/html/
-
+# Section that sets up Apache and Cosign to run as non-root user.
+EXPOSE 8080
+EXPOSE 8443
 
 ### change directory owner, as openshift user is in root group.
 RUN chown -R root:root /var/www/html /var/log/apache2 /var/lock/apache2 \
